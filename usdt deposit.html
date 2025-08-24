@@ -1,0 +1,109 @@
+<!-- ✅ USDT Deposit Admin Panel HTML -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>USDT Deposit Admin Panel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      background-color: #673AB7;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    button {
+      padding: 6px 12px;
+      margin: 4px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+    }
+    .verify-btn {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .reject-btn {
+      background-color: #f44336;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Pending USDT Deposits</h2>
+
+  <table id="usdtTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>User ID</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Type</th>
+        <th>Screenshot</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const API_BASE = "https://xinpaynewbackend-master.onrender.com/api/usdt-deposits";
+
+    function fetchDeposits() {
+      fetch(`${API_BASE}/pending`)
+        .then(res => res.json())
+        .then(data => {
+          const tbody = document.querySelector("#usdtTable tbody");
+          tbody.innerHTML = "";
+          data.forEach(d => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${d.id}</td>
+              <td>${d.userId}</td>
+              <td>$${d.amount}</td>
+              <td>${d.status}</td>
+              <td>${d.type}</td>
+              <td><a href="${d.screenshotUrl}" target="_blank">View</a></td>
+              <td>
+                <button class="verify-btn" onclick="verify(${d.id})">\u2705</button>
+                <button class="reject-btn" onclick="reject(${d.id})">\u2716\ufe0f</button>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
+        });
+    }
+
+    function verify(id) {
+      fetch(`${API_BASE}/${id}/verify`, { method: "PUT" })
+        .then(res => res.ok ? fetchDeposits() : alert("Failed to verify"));
+    }
+
+    function reject(id) {
+      fetch(`${API_BASE}/${id}/reject`, { method: "PUT" })
+        .then(res => res.ok ? fetchDeposits() : alert("Failed to reject"));
+    }
+
+    fetchDeposits();
+  </script>
+
+</body>
+</html>

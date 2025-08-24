@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>XinPay Admin Panel - Update TRC20 Address</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef2f5;
+      padding: 40px;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      background-color: #00bcd4;
+      color: white;
+      border: none;
+      padding: 12px;
+      width: 100%;
+      margin-top: 15px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0097a7;
+    }
+    .message {
+      text-align: center;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>🛠️ XinPay Admin Panel</h2>
+
+  <label for="adminKey">Admin Key:</label>
+  <input type="password" id="adminKey" placeholder="Enter admin key (e.g. xinpay@786)" />
+
+  <label for="address">New TRC20 Address:</label>
+  <input type="text" id="address" placeholder="Enter new TRC20 address" />
+
+  <button onclick="updateAddress()">Update Address</button>
+
+  <div id="message" class="message"></div>
+</div>
+
+<script>
+  function updateAddress() {
+    const address = document.getElementById("address").value.trim();
+    const adminKey = document.getElementById("adminKey").value.trim();
+    const messageBox = document.getElementById("message");
+
+    if (!adminKey) {
+      messageBox.innerText = "Please enter the admin key.";
+      messageBox.style.color = "red";
+      return;
+    }
+
+    if (!address) {
+      messageBox.innerText = "Please enter the TRC20 address.";
+      messageBox.style.color = "red";
+      return;
+    }
+
+    fetch("https://xinpaynewbackend-master.onrender.com/api/wallet/usdt-address", {
+      method: "PUT",  
+      headers: {
+        "Content-Type": "application/json",
+        "X-ADMIN-KEY": adminKey
+      },
+      body: JSON.stringify(address)
+    })
+    .then(response => response.text())
+    .then(data => {
+      messageBox.innerText = data;
+      messageBox.style.color = "green";
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      messageBox.innerText = "Failed to update address.";
+      messageBox.style.color = "red";
+    });
+  }
+</script>
+
+</body>
+</html>

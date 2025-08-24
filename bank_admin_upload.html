@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Update Bank Details</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 40px;
+    }
+
+    .container {
+      background: white;
+      max-width: 500px;
+      margin: auto;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #ccc;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #4FC3F7;
+      color: white;
+      border: none;
+      padding: 12px;
+      width: 100%;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #039BE5;
+    }
+
+    .note {
+      color: #555;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    .message {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 14px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Update Bank Details (with QR Link)</h2>
+  <form id="bankForm">
+    <label for="accountNumber">Account Number:</label>
+    <input type="text" name="accountNumber" id="accountNumber" required>
+
+    <label for="ifscCode">IFSC Code:</label>
+    <input type="text" name="ifscCode" id="ifscCode" required>
+
+    <label for="accountHolder">Account Holder Name:</label>
+    <input type="text" name="accountHolder" id="accountHolder" required>
+
+    <label for="qrImageUrl">QR Code Direct Image URL (e.g. ImgBB):</label>
+    <input type="text" name="qrImageUrl" id="qrImageUrl">
+
+    <button type="submit">Submit</button>
+    <p class="note">Make sure your backend is live at <strong>xinpay-backend.onrender.com</strong></p>
+    <p class="message" id="statusMsg"></p>
+  </form>
+</div>
+
+<script>
+  document.getElementById('bankForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const form = {
+      accountNumber: document.getElementById('accountNumber').value.trim(),
+      ifscCode: document.getElementById('ifscCode').value.trim(),
+      accountHolder: document.getElementById('accountHolder').value.trim(),
+      qrImageUrl: document.getElementById('qrImageUrl').value.trim()
+    };
+
+    const statusMsg = document.getElementById('statusMsg');
+    statusMsg.textContent = "Uploading...";
+
+    try {
+      const response = await fetch("https://xinpaynewbackend-master.onrender.com/api/bank-details/update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(form)
+      });
+
+      if (response.ok) {
+        statusMsg.textContent = "✅ Bank details updated successfully!";
+      } else {
+        statusMsg.textContent = "❌ Failed to update bank details.";
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      statusMsg.textContent = "❌ An error occurred.";
+    }
+  });
+</script>
+
+</body>
+</html>
