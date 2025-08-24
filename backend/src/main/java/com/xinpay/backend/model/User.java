@@ -21,6 +21,9 @@ public class User {
     private boolean isVerified = false;
 
     private String profileImageUrl; // ✅ New field for profile picture
+
+     @Column(length = 512)
+    private String fcmToken; // ✅ FCM token
     
     
 
@@ -72,6 +75,14 @@ public class User {
 
     public void setProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
+    }
+
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
     
     
