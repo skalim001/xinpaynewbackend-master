@@ -126,7 +126,7 @@ public class AuthController {
         Optional<User> userOpt = userRepository.findByEmail(email);
         if (userOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("error", "User does not exist."));
+                    .body(Map.of("error", "User does not exist. Please Sign Up"));
         }
 
         User user = userOpt.get();
