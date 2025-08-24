@@ -22,8 +22,7 @@ public class User {
 
     private String profileImageUrl; // ✅ New field for profile picture
     
-    @Column(length = 512)
-    private String fcmToken; // ✅ FCM token
+    
 
     // ✅ Getters & Setters
 
@@ -75,11 +74,5 @@ public class User {
         this.profileImageUrl = profileImageUrl;
     }
     
-    public String getFcmToken() {
-        return fcmToken;
-    }
-
-    public void setFcmToken(String fcmToken) {
-        this.fcmToken = fcmToken;
-    }
+    
 }
