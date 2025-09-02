@@ -13,7 +13,7 @@ public class OldVersionInterceptor implements HandlerInterceptor {
         // Always return old version error
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.setContentType("application/json");
-        response.getWriter().write("{\"error\":\"This is an old version. Don't deposit money here.\"}");
+        response.getWriter().write("{\"error\":\"This is an old version. Don't deposit money here. PLease download our updtaed version from the below official link    https://xinpay.co.in/xinpay-v1.apk\"}");
         return false; // Stop further processing
     }
 }
