@@ -1,7 +1,11 @@
 package com.xinpay.backend.config;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -34,5 +38,25 @@ public class WebConfig implements WebMvcConfigurer {
         // Serve files from file:/<path>/ mapped to /uploads/**
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:" + uploadDir + "/");
+    }
+
+    /**
+     * ✅ Add interceptor to append "old version" message to all API responses
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new OldVersionInterceptor());
+    }
+
+    /**
+     * ✅ Interceptor class
+     */
+    private static class OldVersionInterceptor implements HandlerInterceptor {
+        @Override
+        public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+            // Add custom header or attribute for frontend to show Toast
+            response.addHeader("X-Toast-Message", "This is old version of XinPay, don't deposit money here");
+            return true; // Continue processing
+        }
     }
 }
